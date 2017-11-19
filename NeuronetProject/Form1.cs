@@ -12,7 +12,7 @@ namespace NeuronetProject
 {
 	public partial class Form1 : Form
 	{
-		// Параметры метода
+		// Параметры задачи
 		private int n;
 		private float T;
 		private float B;
@@ -21,10 +21,17 @@ namespace NeuronetProject
 		private float[] a;
 		private float[] A;
 		private float[] Y;
+		// параметры метода
+		private int q = 1; // ?
+		private float dt;
+		// Характеристики нейрона
+		private float[][] x;
+		private float[,,] w;
 
 		public Form1()
 		{
 			InitializeComponent();
+
 			dataGridView1.Rows.Add();
 			dataGridView1["i", 0].Value = 1;
 		}
@@ -43,14 +50,18 @@ namespace NeuronetProject
 			{
 				dataGridView1.Rows.Add();
 				dataGridView1["i", dataGridView1.Rows.Count - 1].Value = dataGridView1.Rows.Count;
-				foreach (DataGridViewCell cell in dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells)
-					cell.ValueType = typeof(int);
 			}
 			while (dataGridView1.Rows.Count > n)
 				dataGridView1.Rows.RemoveAt(n);
 		}
 
 		private void buttonEnterTaskParams_Click(object sender, EventArgs e)
+		{
+			ParseParams();
+			FillDataGridViewX();
+		}
+
+		private void ParseParams()
 		{
 			n = Decimal.ToInt32(fieldN.Value);
 
@@ -96,6 +107,21 @@ namespace NeuronetProject
 					return;
 				}
 			}
+		}
+
+		private void FillDataGridViewX()
+		{
+			while (dataGridViewX.Columns.Count < n + 1)
+				dataGridViewX.Columns.Add("x" + (dataGridViewX.Columns.Count), "x" + (dataGridViewX.Columns.Count));
+			while (dataGridViewX.Columns.Count > n + 1)
+				dataGridViewX.Columns.RemoveAt(n + 1);
+
+			x = new float[q][];
+			x[0] = a;
+			dataGridViewX.Rows.Add("0");
+			for (int i = 0; i < n; i++)
+				dataGridViewX["x" + (i + 1), 0].Value = a[i];
+
 		}
 
 

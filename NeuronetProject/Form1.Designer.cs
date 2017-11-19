@@ -38,12 +38,12 @@
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.panel1_1 = new System.Windows.Forms.Panel();
+			this.fieldM1 = new System.Windows.Forms.TextBox();
+			this.fieldM2 = new System.Windows.Forms.TextBox();
+			this.fieldB = new System.Windows.Forms.TextBox();
+			this.fieldT = new System.Windows.Forms.TextBox();
 			this.buttonEnterTaskParams = new System.Windows.Forms.Button();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
-			this.i = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.ai = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Aai = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Yi = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.label6 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
@@ -51,10 +51,15 @@
 			this.fieldN = new System.Windows.Forms.NumericUpDown();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
-			this.fieldT = new System.Windows.Forms.TextBox();
-			this.fieldM1 = new System.Windows.Forms.TextBox();
-			this.fieldB = new System.Windows.Forms.TextBox();
-			this.fieldM2 = new System.Windows.Forms.TextBox();
+			this.label7 = new System.Windows.Forms.Label();
+			this.tabPage3 = new System.Windows.Forms.TabPage();
+			this.tabPage4 = new System.Windows.Forms.TabPage();
+			this.dataGridViewX = new System.Windows.Forms.DataGridView();
+			this.k = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.i = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ai = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Aai = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Yi = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
@@ -63,16 +68,21 @@
 			this.panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
+			this.splitContainer1.Panel2.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
 			this.panel1_1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.fieldN)).BeginInit();
+			this.tabPage3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridViewX)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tabControl1
 			// 
 			this.tabControl1.Controls.Add(this.tabPage1);
 			this.tabControl1.Controls.Add(this.tabPage2);
+			this.tabControl1.Controls.Add(this.tabPage3);
+			this.tabControl1.Controls.Add(this.tabPage4);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl1.Location = new System.Drawing.Point(0, 0);
 			this.tabControl1.Name = "tabControl1";
@@ -88,7 +98,7 @@
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage1.Size = new System.Drawing.Size(687, 412);
 			this.tabPage1.TabIndex = 0;
-			this.tabPage1.Text = "tabPage1";
+			this.tabPage1.Text = "Задача";
 			this.tabPage1.UseVisualStyleBackColor = true;
 			// 
 			// flowLayoutPanel1
@@ -119,7 +129,7 @@
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage2.Size = new System.Drawing.Size(687, 412);
 			this.tabPage2.TabIndex = 1;
-			this.tabPage2.Text = "tabPage2";
+			this.tabPage2.Text = "Параметры";
 			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
 			// panel1
@@ -145,6 +155,10 @@
 			this.splitContainer1.Panel1.Controls.Add(this.fieldN);
 			this.splitContainer1.Panel1.Controls.Add(this.label2);
 			this.splitContainer1.Panel1.Controls.Add(this.label1);
+			// 
+			// splitContainer1.Panel2
+			// 
+			this.splitContainer1.Panel2.Controls.Add(this.label7);
 			this.splitContainer1.Size = new System.Drawing.Size(681, 406);
 			this.splitContainer1.SplitterDistance = 344;
 			this.splitContainer1.TabIndex = 0;
@@ -167,12 +181,44 @@
 			this.panel1_1.Size = new System.Drawing.Size(344, 350);
 			this.panel1_1.TabIndex = 3;
 			// 
+			// fieldM1
+			// 
+			this.fieldM1.Location = new System.Drawing.Point(33, 40);
+			this.fieldM1.Name = "fieldM1";
+			this.fieldM1.Size = new System.Drawing.Size(46, 20);
+			this.fieldM1.TabIndex = 4;
+			this.fieldM1.Text = "0";
+			// 
+			// fieldM2
+			// 
+			this.fieldM2.Location = new System.Drawing.Point(138, 40);
+			this.fieldM2.Name = "fieldM2";
+			this.fieldM2.Size = new System.Drawing.Size(46, 20);
+			this.fieldM2.TabIndex = 5;
+			this.fieldM2.Text = "0";
+			// 
+			// fieldB
+			// 
+			this.fieldB.Location = new System.Drawing.Point(138, 14);
+			this.fieldB.Name = "fieldB";
+			this.fieldB.Size = new System.Drawing.Size(46, 20);
+			this.fieldB.TabIndex = 3;
+			this.fieldB.Text = "0";
+			// 
+			// fieldT
+			// 
+			this.fieldT.Location = new System.Drawing.Point(33, 14);
+			this.fieldT.Name = "fieldT";
+			this.fieldT.Size = new System.Drawing.Size(46, 20);
+			this.fieldT.TabIndex = 2;
+			this.fieldT.Text = "0";
+			// 
 			// buttonEnterTaskParams
 			// 
 			this.buttonEnterTaskParams.Location = new System.Drawing.Point(219, 33);
 			this.buttonEnterTaskParams.Name = "buttonEnterTaskParams";
 			this.buttonEnterTaskParams.Size = new System.Drawing.Size(75, 23);
-			this.buttonEnterTaskParams.TabIndex = 4;
+			this.buttonEnterTaskParams.TabIndex = 7;
 			this.buttonEnterTaskParams.Text = "Ввести";
 			this.buttonEnterTaskParams.UseVisualStyleBackColor = true;
 			this.buttonEnterTaskParams.Click += new System.EventHandler(this.buttonEnterTaskParams_Click);
@@ -191,34 +237,7 @@
 			this.dataGridView1.Name = "dataGridView1";
 			this.dataGridView1.RowHeadersVisible = false;
 			this.dataGridView1.Size = new System.Drawing.Size(344, 269);
-			this.dataGridView1.TabIndex = 3;
-			// 
-			// i
-			// 
-			dataGridViewCellStyle1.Format = "N0";
-			dataGridViewCellStyle1.NullValue = null;
-			this.i.DefaultCellStyle = dataGridViewCellStyle1;
-			this.i.HeaderText = "i";
-			this.i.Name = "i";
-			this.i.Width = 40;
-			// 
-			// ai
-			// 
-			this.ai.HeaderText = "ai";
-			this.ai.Name = "ai";
-			this.ai.Width = 95;
-			// 
-			// Aai
-			// 
-			this.Aai.HeaderText = "Ai";
-			this.Aai.Name = "Aai";
-			this.Aai.Width = 95;
-			// 
-			// Yi
-			// 
-			this.Yi.HeaderText = "Yi";
-			this.Yi.Name = "Yi";
-			this.Yi.Width = 95;
+			this.dataGridView1.TabIndex = 6;
 			// 
 			// label6
 			// 
@@ -288,37 +307,84 @@
 			this.label1.TabIndex = 0;
 			this.label1.Text = "Параметры задачи:";
 			// 
-			// fieldT
+			// label7
 			// 
-			this.fieldT.Location = new System.Drawing.Point(33, 14);
-			this.fieldT.Name = "fieldT";
-			this.fieldT.Size = new System.Drawing.Size(46, 20);
-			this.fieldT.TabIndex = 5;
-			this.fieldT.Text = "0";
+			this.label7.AutoSize = true;
+			this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.label7.Location = new System.Drawing.Point(88, -3);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(163, 20);
+			this.label7.TabIndex = 0;
+			this.label7.Text = "Параметры метода:";
 			// 
-			// fieldM1
+			// tabPage3
 			// 
-			this.fieldM1.Location = new System.Drawing.Point(33, 40);
-			this.fieldM1.Name = "fieldM1";
-			this.fieldM1.Size = new System.Drawing.Size(46, 20);
-			this.fieldM1.TabIndex = 5;
-			this.fieldM1.Text = "0";
+			this.tabPage3.Controls.Add(this.dataGridViewX);
+			this.tabPage3.Location = new System.Drawing.Point(4, 22);
+			this.tabPage3.Name = "tabPage3";
+			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage3.Size = new System.Drawing.Size(687, 412);
+			this.tabPage3.TabIndex = 2;
+			this.tabPage3.Text = "tabPage3";
+			this.tabPage3.UseVisualStyleBackColor = true;
 			// 
-			// fieldB
+			// tabPage4
 			// 
-			this.fieldB.Location = new System.Drawing.Point(138, 14);
-			this.fieldB.Name = "fieldB";
-			this.fieldB.Size = new System.Drawing.Size(46, 20);
-			this.fieldB.TabIndex = 5;
-			this.fieldB.Text = "0";
+			this.tabPage4.Location = new System.Drawing.Point(4, 22);
+			this.tabPage4.Name = "tabPage4";
+			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage4.Size = new System.Drawing.Size(687, 412);
+			this.tabPage4.TabIndex = 3;
+			this.tabPage4.Text = "tabPage4";
+			this.tabPage4.UseVisualStyleBackColor = true;
 			// 
-			// fieldM2
+			// dataGridViewX
 			// 
-			this.fieldM2.Location = new System.Drawing.Point(138, 40);
-			this.fieldM2.Name = "fieldM2";
-			this.fieldM2.Size = new System.Drawing.Size(46, 20);
-			this.fieldM2.TabIndex = 5;
-			this.fieldM2.Text = "0";
+			this.dataGridViewX.AllowUserToAddRows = false;
+			this.dataGridViewX.AllowUserToDeleteRows = false;
+			this.dataGridViewX.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dataGridViewX.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.k});
+			this.dataGridViewX.Location = new System.Drawing.Point(7, 61);
+			this.dataGridViewX.Name = "dataGridViewX";
+			this.dataGridViewX.RowHeadersVisible = false;
+			this.dataGridViewX.Size = new System.Drawing.Size(240, 150);
+			this.dataGridViewX.TabIndex = 0;
+			// 
+			// k
+			// 
+			this.k.HeaderText = "k";
+			this.k.Name = "k";
+			this.k.ReadOnly = true;
+			this.k.Width = 35;
+			// 
+			// i
+			// 
+			dataGridViewCellStyle1.Format = "N0";
+			dataGridViewCellStyle1.NullValue = null;
+			this.i.DefaultCellStyle = dataGridViewCellStyle1;
+			this.i.HeaderText = "i";
+			this.i.Name = "i";
+			this.i.ReadOnly = true;
+			this.i.Width = 40;
+			// 
+			// ai
+			// 
+			this.ai.HeaderText = "ai";
+			this.ai.Name = "ai";
+			this.ai.Width = 95;
+			// 
+			// Aai
+			// 
+			this.Aai.HeaderText = "Ai";
+			this.Aai.Name = "Aai";
+			this.Aai.Width = 95;
+			// 
+			// Yi
+			// 
+			this.Yi.HeaderText = "Yi";
+			this.Yi.Name = "Yi";
+			this.Yi.Width = 95;
 			// 
 			// Form1
 			// 
@@ -338,12 +404,16 @@
 			this.panel1.ResumeLayout(false);
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel1.PerformLayout();
+			this.splitContainer1.Panel2.ResumeLayout(false);
+			this.splitContainer1.Panel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
 			this.splitContainer1.ResumeLayout(false);
 			this.panel1_1.ResumeLayout(false);
 			this.panel1_1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.fieldN)).EndInit();
+			this.tabPage3.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.dataGridViewX)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -367,14 +437,19 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.DataGridView dataGridView1;
 		private System.Windows.Forms.Button buttonEnterTaskParams;
-		private System.Windows.Forms.DataGridViewTextBoxColumn i;
-		private System.Windows.Forms.DataGridViewTextBoxColumn ai;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Aai;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Yi;
 		private System.Windows.Forms.TextBox fieldM1;
 		private System.Windows.Forms.TextBox fieldT;
 		private System.Windows.Forms.TextBox fieldM2;
 		private System.Windows.Forms.TextBox fieldB;
+		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.TabPage tabPage3;
+		private System.Windows.Forms.TabPage tabPage4;
+		private System.Windows.Forms.DataGridView dataGridViewX;
+		private System.Windows.Forms.DataGridViewTextBoxColumn k;
+		private System.Windows.Forms.DataGridViewTextBoxColumn i;
+		private System.Windows.Forms.DataGridViewTextBoxColumn ai;
+		private System.Windows.Forms.DataGridViewTextBoxColumn Aai;
+		private System.Windows.Forms.DataGridViewTextBoxColumn Yi;
 	}
 }
 
