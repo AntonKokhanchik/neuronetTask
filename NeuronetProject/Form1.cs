@@ -13,20 +13,21 @@ namespace NeuronetProject
 	public partial class Form1 : Form
 	{
 		// Параметры задачи
-		private int n;
-		private float T;
-		private float B;
-		private float M1;
+		private int n;							// количество нейронов(и слоёв)
+		private float T;						// отрезок времени
+		private float B;						// ограничение на синаптические веса
+		private float M1;	
 		private float M2;
-		private float[] a;
-		private float[] A;
+		private float[] a;						// начальные значени я характеристик нейронов
+		private float[] A;	
 		private float[] Y;
+
 		// параметры метода
-		private int q = 1; // ?
+		private int q = 10; // ?				// мелкость разбиения
 		private float dt;
-		// Характеристики нейрона
-		private float[][] x;
-		private float[,,] w;
+		
+		private float[/*шаг*/][/*номер нейрона*/] x;					// Характеристики нейрона
+		private float[/*шаг*/][/*номер нейрона*/,/*номер слоя*/] w;		// синаптические веса нейрона
 
 		public Form1()
 		{
@@ -58,6 +59,8 @@ namespace NeuronetProject
 		private void buttonEnterTaskParams_Click(object sender, EventArgs e)
 		{
 			ParseParams();
+			InitW();
+			InitX();
 			FillDataGridViewX();
 		}
 
@@ -109,6 +112,35 @@ namespace NeuronetProject
 			}
 		}
 
+		private void InitW()
+		{
+			w = new float[q][,];
+
+			for(int k=0;k<q;k++)
+				w[k] = new float[n, n];
+		}
+
+		private void InitX()
+		{
+			dt = T / q;
+			x = new float[q + 1][];
+
+			x[0] = a;
+
+			for (int k = 0; k < q; k++)
+			{
+				x[k + 1] = new float[n];
+				for (int i = 0; i < n; i++)
+				{ 
+					float Swx = 0;
+					for (int j = 0; j < n; j++)
+						Swx += w[k][i, j] * x[k][j];
+
+					x[k+1][i] = x[k][i] + dt * (-Y[i] * x[k][i] + Swx);
+				}
+			}
+		}
+
 		private void FillDataGridViewX()
 		{
 			while (dataGridViewX.Columns.Count < n + 1)
@@ -116,14 +148,12 @@ namespace NeuronetProject
 			while (dataGridViewX.Columns.Count > n + 1)
 				dataGridViewX.Columns.RemoveAt(n + 1);
 
-			x = new float[q][];
-			x[0] = a;
-			dataGridViewX.Rows.Add("0");
-			for (int i = 0; i < n; i++)
-				dataGridViewX["x" + (i + 1), 0].Value = a[i];
-
+			for (int k = 0; k <= q; k++)
+			{
+				dataGridViewX.Rows.Add(k.ToString());
+				for (int i = 0; i < n; i++)
+					dataGridViewX["x" + (i + 1), k].Value = x[k][i];
+			}
 		}
-
-
 	}
 }
