@@ -13,7 +13,7 @@ namespace NeuronetProject
 	public partial class Form1 : Form
 	{
 		// Параметры задачи
-		private int n;							// количество нейронов(и слоёв)
+		private int n;							// количество нейронов
 		private float T;						// отрезок времени
 		private float B;						// ограничение на синаптические веса
 		private float M1;	
@@ -23,7 +23,7 @@ namespace NeuronetProject
 		private float[] Y;
 
 		// параметры метода
-		private int q = 10; // ?				// мелкость разбиения
+		private int q = 10; // ?				// мелкость разбиения (и количество слоёв)
 		private float dt;
 		
 		private float[/*шаг*/][/*номер нейрона*/] x;					// Характеристики нейрона
@@ -40,13 +40,7 @@ namespace NeuronetProject
 		private void fieldN_ValueChanged(object sender, EventArgs e)
 		{
 			int n = Decimal.ToInt32(fieldN.Value);
-			if (n <= 0)
-			{
-				panel1_1.Enabled = false;
-				return;
-			}
 
-			panel1_1.Enabled = true;
 			while (dataGridView1.Rows.Count < n)
 			{
 				dataGridView1.Rows.Add();
@@ -153,6 +147,35 @@ namespace NeuronetProject
 				dataGridViewX.Rows.Add(k.ToString());
 				for (int i = 0; i < n; i++)
 					dataGridViewX["x" + (i + 1), k].Value = x[k][i];
+			}
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			Graphics g = pictureBox2.CreateGraphics();
+			g.ScaleTransform(20, 20);
+			g.TranslateTransform(1, 10);
+
+			Pen pen = new Pen(Color.Gray,0.1f);
+			Point[] tmpoints = new Point[2];
+			tmpoints[0] = new Point(-1, 0);
+			tmpoints[1] = new Point(100, 0);
+			g.DrawLines(pen, tmpoints);
+			tmpoints[0] = new Point(0, 100);
+			tmpoints[1] = new Point(0, -100);
+			g.DrawLines(pen, tmpoints);
+
+			Random r = new Random();
+
+			for (int i=0; i<n; i++)
+			{
+				pen = new Pen(Color.FromArgb(r.Next(255), r.Next(255), r.Next(255), r.Next(255)), 0.1f);
+				PointF[] points = new PointF[q];
+				for (int k=0;k<q;k++)
+				{
+					points[k] = new PointF(k, -x[k][i]);
+				}
+				g.DrawLines(pen, points);
 			}
 		}
 	}
