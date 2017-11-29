@@ -120,7 +120,12 @@ namespace NeuronetProject
 			}
 			if(!float.TryParse(fieldEpsilon.Text, out epsilon))
 			{
-				MessageBox.Show("В поле T ошибка, вводите только числа");
+				MessageBox.Show("В поле ɛ ошибка, вводите только числа");
+				return;
+			}
+			if (!float.TryParse(fieldAlpha.Text, out alpha))
+			{
+				MessageBox.Show("В поле α ошибка, вводите только числа");
 				return;
 			}
 
