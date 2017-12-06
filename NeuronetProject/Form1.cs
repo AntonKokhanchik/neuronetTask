@@ -11,33 +11,34 @@ using System.Windows.Forms;
 namespace NeuronetProject
 {
 	// TODO: проверить работу, допилить графики, сделать график I от шагов, сделать таблицу ввода w
+    //       динамический вывдов I и x(q) на каждой итерации
 	public partial class Form1 : Form
 	{
 		Random r;
 		// Параметры задачи
 		private int n;				// количество нейронов
-		private float T;			// отрезок времени
-		private float B;			// ограничение на синаптические веса
-		private float M1;			// штрафные коэффициенты
-		private float M2;
-		private float[] a;			// начальные значени я характеристик нейронов
-		private float[] A;	
-		private float[] Y;
+		private double T;			// отрезок времени
+		private double B;			// ограничение на синаптические веса
+		private double M1;			// штрафные коэффициенты
+		private double M2;
+		private double[] a;			// начальные значени я характеристик нейронов
+		private double[] A;	
+		private double[] Y;
 
 		// параметры метода
 		private int q;				// мелкость разбиения и количество слоёв
 
-		private float epsilon;		// точность
-		private float alpha;        // шаг градиентного спуска
-		private float dt;           // отрезок разбиения
-		private float[/*номер слоя*/][/*номер нейрона*/] p;                         // Множители Лагранжа
+		private double epsilon;		// точность
+		private double alpha;        // шаг градиентного спуска
+		private double dt;           // отрезок разбиения
+		private double[/*номер слоя*/][/*номер нейрона*/] p;                        // Множители Лагранжа
 
-		private float[/*номер слоя*/][/*номер нейрона*/] x0;						// Характеристики нейрона на предыдущем шаге
-		private float[/*номер слоя*/][/*номер нейрона*/] x1;						// Характеристики нейрона на текущем шаге
-		private float[/*номер слоя*/][/*номер нейрона 1*/,/*номер нейрона 2*/] w0;	// синаптические веса нейрона на предыдущем шаге
-		private float[/*номер слоя*/][/*номер нейрона 1*/,/*номер нейрона 2*/] w1;	// синаптические веса нейрона на текущем шаге
-		private float I0;           // значение целевой функции на предыдущем шаге
-		private float I1;           // значение целевой функции на текущем шаге
+		private double[/*номер слоя*/][/*номер нейрона*/] x0;						// Характеристики нейрона на предыдущем шаге
+		private double[/*номер слоя*/][/*номер нейрона*/] x1;						// Характеристики нейрона на текущем шаге
+		private double[/*номер слоя*/][/*номер нейрона 1*/,/*номер нейрона 2*/] w0;	// синаптические веса нейрона на предыдущем шаге
+		private double[/*номер слоя*/][/*номер нейрона 1*/,/*номер нейрона 2*/] w1;	// синаптические веса нейрона на текущем шаге
+		private double I0;           // значение целевой функции на предыдущем шаге
+		private double I1;           // значение целевой функции на текущем шаге
 
 		public Form1()
 		{
@@ -57,7 +58,7 @@ namespace NeuronetProject
 
 			fieldM1.Text = r.Next(1000, 10000).ToString();
 			fieldM2.Text = r.Next(1000, 10000).ToString();
-			fieldT.Text = (r.Next(10, 1000) / 10f).ToString();
+            fieldT.Text = "1"; // (r.Next(10, 1000) / 10f).ToString();
 			fieldB.Text = (r.Next(0, 100) / 10f).ToString();
 			fieldEpsilon.Text = "1E-" + r.Next(2, 10);
 			fieldAlpha.Text = "9";
@@ -89,7 +90,7 @@ namespace NeuronetProject
 			x0 = x1;
 			w0 = w1;
 			I0 = I1;
-			RunOptimization();
+			
 			FillDataGridViewX();
 		}
 
@@ -98,53 +99,53 @@ namespace NeuronetProject
 			n = Decimal.ToInt32(fieldN.Value);
 			q = Decimal.ToInt32(fieldQ.Value);
 
-			if (!float.TryParse(fieldT.Text, out T))
+			if (!double.TryParse(fieldT.Text, out T))
 			{
 				MessageBox.Show("В поле T ошибка, вводите только числа");
 				return;
 			}
-			if (!float.TryParse(fieldB.Text, out B))
+			if (!double.TryParse(fieldB.Text, out B))
 			{
 				MessageBox.Show("В поле B ошибка, вводите только числа");
 				return;
 			}
-			if (!float.TryParse(fieldM1.Text, out M1))
+			if (!double.TryParse(fieldM1.Text, out M1))
 			{
 				MessageBox.Show("В поле M1 ошибка, вводите только числа");
 				return;
 			}
-			if (!float.TryParse(fieldM2.Text, out M2))
+			if (!double.TryParse(fieldM2.Text, out M2))
 			{
 				MessageBox.Show("В поле M2 ошибка, вводите только числа");
 				return;
 			}
-			if(!float.TryParse(fieldEpsilon.Text, out epsilon))
+			if(!double.TryParse(fieldEpsilon.Text, out epsilon))
 			{
 				MessageBox.Show("В поле ɛ ошибка, вводите только числа");
 				return;
 			}
-			if (!float.TryParse(fieldAlpha.Text, out alpha))
+			if (!double.TryParse(fieldAlpha.Text, out alpha))
 			{
 				MessageBox.Show("В поле α ошибка, вводите только числа");
 				return;
 			}
 
-			a = new float[n];
-			A = new float[n];
-			Y = new float[n];
+			a = new double[n];
+			A = new double[n];
+			Y = new double[n];
 			for (int i = 0; i < n; i++)
 			{
-				if (dataGridView1["ai", i].Value == null || !float.TryParse(dataGridView1["ai", i].Value.ToString(), out a[i]))
+				if (dataGridView1["ai", i].Value == null || !double.TryParse(dataGridView1["ai", i].Value.ToString(), out a[i]))
 				{
 					MessageBox.Show("В поле a" + (i + 1) + " ошибка, вводите только числа");
 					return;
 				}
-				if (dataGridView1["Aai", i].Value == null || !float.TryParse(dataGridView1["Aai", i].Value.ToString(), out A[i]))
+				if (dataGridView1["Aai", i].Value == null || !double.TryParse(dataGridView1["Aai", i].Value.ToString(), out A[i]))
 				{
 					MessageBox.Show("В поле A" + (i + 1) + " ошибка, вводите только числа");
 					return;
 				}
-				if (dataGridView1["Yi", i].Value == null || !float.TryParse(dataGridView1["Yi", i].Value.ToString(), out Y[i]))
+				if (dataGridView1["Yi", i].Value == null || !double.TryParse(dataGridView1["Yi", i].Value.ToString(), out Y[i]))
 				{
 					MessageBox.Show("В поле Y" + (i + 1) + " ошибка, вводите только числа");
 					return;
@@ -154,30 +155,30 @@ namespace NeuronetProject
 
 		private void InitW()
 		{
-			w1 = new float[q][,];
+			w1 = new double[q][,];
 
 			for (int k = 0; k < q; k++)
 			{
-				w1[k] = new float[n, n];
+				w1[k] = new double[n, n];
 				for (int i = 0; i < n; i++)
 					for (int j = 0; j < n; j++)
-						w1[k][i, j] = 1;
+						w1[k][i, j] = 0.5;
 			}
 		}
 
 		private void CalculateX()
 		{
 			dt = T / q;
-			x1 = new float[q + 1][];
+			x1 = new double[q + 1][];
 
 			x1[0] = a;
 
 			for (int k = 0; k < q; k++)
 			{
-				x1[k + 1] = new float[n];
+				x1[k + 1] = new double[n];
 				for (int i = 0; i < n; i++)
 				{ 
-					float Swx = 0;
+					double Swx = 0;
 					for (int j = 0; j < n; j++)
 						Swx += w1[k][i, j] * x1[k][j];
 
@@ -188,13 +189,13 @@ namespace NeuronetProject
 
 		private void CalculateI()
 		{
-			float Sw = 0;
+			double Sw = 0;
 			for (int k = 0; k < q; k++)
 				for (int i = 0; i < n; i++)
 					for (int j = 0; j < n; j++)
 						Sw += w1[k][i, j] * w1[k][i, j];
 
-			float Sx = 0;
+			double Sx = 0;
 			for (int i = 0; i < n; i++)
 				Sx += (x1[q][i] - A[i]) * (x1[q][i] - A[i]);
 
@@ -203,43 +204,44 @@ namespace NeuronetProject
 
 		private void RunOptimization()
 		{
-			while(true)
+            CalculateP();
+            while (true)
 			{
-				CalculateP();
 				CalculateW();
 				CalculateX();
 				CalculateI();
 
-				if (Math.Abs(I0 - I1) < epsilon)
-					break;
+                if (Math.Abs(I0 - I1) < epsilon)
+                    break;
 
-				if (I1 > I0)
-					alpha = alpha / 2;
-				else
-				{
-					x0 = x1;
-					w0 = w1;
-					I0 = I1;
-				}
-			}
+                if (I1 > I0)
+                    alpha = alpha / 2;
+                else
+                {
+                    x0 = x1;
+                    w0 = w1;
+                    I0 = I1;
+                    CalculateP();
+                }
+            }
 		}
 
 		private void CalculateP()
 		{
-			p = new float[q+1][];
+			p = new double[q+1][];
 
-			p[q] = new float[n];
+			p[q] = new double[n];
 			for (int i = 0; i < n; i++)
 				p[q][i] = -2 * M2 * (x0[q][i] - A[i]);
 
 			for(int k=q-1; k>0; k--)
 			{
-				p[k] = new float[n];
+				p[k] = new double[n];
 				for (int i = 0; i < n; i++)
 				{
-					float Spw = 0;
+					double Spw = 0;
 					for (int j = 0; j < n; j++)
-						Spw += p[k + 1][j] * w0[k][i, j];
+						Spw += p[k + 1][j] * w0[k][j, i];
 
 					p[k][i] = p[k + 1][i] - dt * Y[i] * p[k + 1][i] + dt * Spw;
 				}
@@ -248,7 +250,7 @@ namespace NeuronetProject
 
 		private void CalculateW()
 		{
-			for (int k = 1; k < q; k++)
+			for (int k = 0; k < q; k++)
 				for (int i = 0; i < n; i++)
 					for (int j = 0; j < n; j++)
 					{
@@ -274,13 +276,14 @@ namespace NeuronetProject
 				for (int i = 0; i < n; i++)
 					dataGridViewX["x" + (i + 1), k].Value = x1[k][i];
 			}
+            fieldI.Text = I1.ToString();
 		}
 
 		private void button1_Click(object sender, EventArgs e)
 		{
 			Graphics g = pictureBox2.CreateGraphics();
-			float scalex = 700 / q;
-			float scaley = 175 / MaxX();
+			double scalex = 700 / q;
+			double scaley = 175 / MaxX();
 			g.TranslateTransform(3, 175);
 
 			Pen pen = new Pen(Color.Gray, 2);
@@ -297,20 +300,26 @@ namespace NeuronetProject
 			for (int i=0; i<n; i++)
 			{
 				pen = new Pen(Color.FromArgb(r.Next(255), r.Next(255), r.Next(255), r.Next(255)), 2);
-				PointF[] points = new PointF[q];
+				PointF[] points = new PointF[q+1];
 				for (int k = 0; k <= q; k++)
-					points[k] = new PointF(k * scalex, -x1[k][i] * scaley);
+					points[k] = new PointF(float.Parse((k * scalex).ToString()), float.Parse((-x1[k][i] * scaley).ToString()));
 				g.DrawLines(pen, points);
 			}
 		}
 
-		private float MaxX()
+		private double MaxX()
 		{
-			float max = x0[0].Max();
+			double max = x0[0].Max();
 			for (int k=1;k<q;k++)
 				if (max < x0[k].Max())
 					max = x0[k].Max();
 			return max;
 		}
-	}
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            RunOptimization();
+            FillDataGridViewX();
+        }
+    }
 }
