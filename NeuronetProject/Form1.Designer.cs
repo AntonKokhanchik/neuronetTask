@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
@@ -56,6 +56,8 @@
 			this.fieldN = new System.Windows.Forms.NumericUpDown();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
+			this.fieldK = new System.Windows.Forms.NumericUpDown();
+			this.label16 = new System.Windows.Forms.Label();
 			this.dataGridViewW = new System.Windows.Forms.DataGridView();
 			this.ij = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.fieldAlpha = new System.Windows.Forms.TextBox();
@@ -80,6 +82,8 @@
 			this.textBoxI = new System.Windows.Forms.TextBox();
 			this.label15 = new System.Windows.Forms.Label();
 			this.label14 = new System.Windows.Forms.Label();
+			this.label17 = new System.Windows.Forms.Label();
+			this.buttonShowW = new System.Windows.Forms.Button();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
@@ -92,6 +96,7 @@
 			this.splitContainer1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridViewParams)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.fieldN)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.fieldK)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridViewW)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.fieldQ)).BeginInit();
 			this.tabPage3.SuspendLayout();
@@ -194,6 +199,10 @@
 			// 
 			// splitContainer1.Panel2
 			// 
+			this.splitContainer1.Panel2.Controls.Add(this.fieldK);
+			this.splitContainer1.Panel2.Controls.Add(this.buttonShowW);
+			this.splitContainer1.Panel2.Controls.Add(this.label17);
+			this.splitContainer1.Panel2.Controls.Add(this.label16);
 			this.splitContainer1.Panel2.Controls.Add(this.dataGridViewW);
 			this.splitContainer1.Panel2.Controls.Add(this.fieldAlpha);
 			this.splitContainer1.Panel2.Controls.Add(this.label10);
@@ -294,9 +303,9 @@
 			// 
 			// i
 			// 
-			dataGridViewCellStyle3.Format = "N0";
-			dataGridViewCellStyle3.NullValue = null;
-			this.i.DefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle5.Format = "N0";
+			dataGridViewCellStyle5.NullValue = null;
+			this.i.DefaultCellStyle = dataGridViewCellStyle5;
 			this.i.HeaderText = "i";
 			this.i.Name = "i";
 			this.i.ReadOnly = true;
@@ -389,6 +398,27 @@
 			this.label1.TabIndex = 0;
 			this.label1.Text = "Параметры задачи:";
 			// 
+			// fieldK
+			// 
+			this.fieldK.Location = new System.Drawing.Point(191, 134);
+			this.fieldK.Maximum = new decimal(new int[] {
+            199,
+            0,
+            0,
+            0});
+			this.fieldK.Name = "fieldK";
+			this.fieldK.Size = new System.Drawing.Size(70, 20);
+			this.fieldK.TabIndex = 16;
+			// 
+			// label16
+			// 
+			this.label16.AutoSize = true;
+			this.label16.Location = new System.Drawing.Point(19, 138);
+			this.label16.Name = "label16";
+			this.label16.Size = new System.Drawing.Size(94, 13);
+			this.label16.TabIndex = 15;
+			this.label16.Text = "w (только вывод)";
+			// 
 			// dataGridViewW
 			// 
 			this.dataGridViewW.AllowUserToAddRows = false;
@@ -457,7 +487,7 @@
             0,
             0,
             0});
-			this.fieldQ.ValueChanged += new System.EventHandler(this.fieldN_ValueChanged);
+			this.fieldQ.ValueChanged += new System.EventHandler(this.fieldQ_ValueChanged);
 			// 
 			// label8
 			// 
@@ -639,6 +669,26 @@
 			this.label14.TabIndex = 0;
 			this.label14.Text = "I";
 			// 
+			// label17
+			// 
+			this.label17.AutoSize = true;
+			this.label17.Location = new System.Drawing.Point(153, 138);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(32, 13);
+			this.label17.TabIndex = 15;
+			this.label17.Text = "Слой";
+			// 
+			// buttonShowW
+			// 
+			this.buttonShowW.Location = new System.Drawing.Point(267, 133);
+			this.buttonShowW.Name = "buttonShowW";
+			this.buttonShowW.Size = new System.Drawing.Size(75, 23);
+			this.buttonShowW.TabIndex = 11;
+			this.buttonShowW.Text = "Вывести w";
+			this.buttonShowW.UseVisualStyleBackColor = true;
+			this.buttonShowW.Click += new System.EventHandler(this.buttonShowW_Click);
+			this.buttonShowW.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonEnterTaskParams_MouseDown);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -664,6 +714,7 @@
 			this.splitContainer1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.dataGridViewParams)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.fieldN)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.fieldK)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridViewW)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.fieldQ)).EndInit();
 			this.tabPage3.ResumeLayout(false);
@@ -729,6 +780,10 @@
 		private System.Windows.Forms.TextBox textBoxI;
 		private System.Windows.Forms.Label label15;
 		private System.Windows.Forms.Label label14;
+		private System.Windows.Forms.NumericUpDown fieldK;
+		private System.Windows.Forms.Label label16;
+		private System.Windows.Forms.Button buttonShowW;
+		private System.Windows.Forms.Label label17;
 	}
 }
 

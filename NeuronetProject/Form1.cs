@@ -10,7 +10,6 @@ using System.Windows.Forms;
 
 namespace NeuronetProject
 {
-	// TODO: допилить графики, сделать график I от шагов, сделать таблицу ввода w
 	public partial class Form1 : Form
 	{
 		// Параметры задачи
@@ -37,8 +36,6 @@ namespace NeuronetProject
 		private double[/*номер слоя*/][/*номер нейрона 1*/,/*номер нейрона 2*/] w1;	// синаптические веса нейрона на текущем шаге
 		private double I0;           // значение целевой функции на предыдущем шаге
 		private double I1;           // значение целевой функции на текущем шаге
-		// Отладка
-		private List<double> I; // на каждом шаге
 
 
 		public Form1()
@@ -62,6 +59,7 @@ namespace NeuronetProject
 			fieldEpsilon.Text = "1E-6";
 			fieldAlpha.Text = "1E-6";
 			ParseParams();
+			InitArrays();
 		}
 
 		private void fieldN_ValueChanged(object sender, EventArgs e)
@@ -83,7 +81,6 @@ namespace NeuronetProject
 		private void buttonEnterTaskParams_Click(object sender, EventArgs e)
 		{
 			ParseParams();
-			InitW();
 			CalculateX();
 			CalculateI();
 			x0 = x1;
@@ -171,10 +168,10 @@ namespace NeuronetProject
 			dt = T / q;
 		}
 
-		private void InitW()
+		private void InitArrays()
 		{
+			// w
 			w1 = new double[q][,];
-
 			for (int k = 0; k < q; k++)
 			{
 				w1[k] = new double[n, n];
@@ -182,17 +179,21 @@ namespace NeuronetProject
 					for (int j = 0; j < n; j++)
 						w1[k][i, j] = 0.5;
 			}
+			// x
+			x1 = new double[q + 1][];
+			x1[0] = a;
+			for (int k = 0; k < q; k++)
+				x1[k + 1] = new double[n];
+			// p
+			p = new double[q + 1][];
+			p[q] = new double[n];
+			for (int k = q - 1; k > 0; k--)
+				p[k] = new double[n];
 		}
 
 		private void CalculateX()
 		{
-			x1 = new double[q + 1][];
-
-			x1[0] = a;
-
 			for (int k = 0; k < q; k++)
-			{
-				x1[k + 1] = new double[n];
 				for (int i = 0; i < n; i++)
 				{ 
 					double Swx = 0;
@@ -201,7 +202,6 @@ namespace NeuronetProject
 
 					x1[k+1][i] = x1[k][i] + dt * (-Y[i] * x1[k][i] + Swx);
 				}
-			}
 		}
 
 		private void CalculateI()
@@ -258,15 +258,11 @@ namespace NeuronetProject
 
 		private void CalculateP()
 		{
-			p = new double[q+1][];
-
-			p[q] = new double[n];
 			for (int i = 0; i < n; i++)
 				p[q][i] = -2 * M2 * (x0[q][i] - A[i]);
 
 			for(int k=q-1; k>0; k--)
 			{
-				p[k] = new double[n];
 				for (int i = 0; i < n; i++)
 				{
 					double Spw = 0;
@@ -307,11 +303,6 @@ namespace NeuronetProject
 					dataGridViewX["x" + (i + 1), k].Value = x1[k][i];
 			}
             fieldI.Text = I1.ToString();
-		}
-
-		private void FillDataGridViewW(int k)
-		{
-
 		}
 
 		private void buttonGraphX_Click(object sender, EventArgs e)
@@ -365,6 +356,29 @@ namespace NeuronetProject
 		private void buttonEnterTaskParams_MouseDown(object sender, MouseEventArgs e)
 		{
 			buttonEnterTaskParams.ForeColor = Color.Black;
+		}
+
+		private void fieldQ_ValueChanged(object sender, EventArgs e)
+		{
+			fieldK.Maximum = q - 1;
+		}
+
+		private void buttonShowW_Click(object sender, EventArgs e)
+		{
+			int k = Decimal.ToInt32(fieldK.Value);
+			while (dataGridViewW.Columns.Count < n + 1)
+				dataGridViewW.Columns.Add(dataGridViewW.Columns.Count.ToString(), dataGridViewW.Columns.Count.ToString());
+			while (dataGridViewW.Columns.Count > n + 1)
+				dataGridViewW.Columns.RemoveAt(n + 1);
+
+			while (dataGridViewW.Rows.Count < n)
+				dataGridViewW.Rows.Add((dataGridViewW.Rows.Count+1).ToString());
+			while (dataGridViewW.Rows.Count > n)
+				dataGridViewW.Rows.RemoveAt(n);
+
+			for (int i = 0; i < n; i++)
+				for (int j = 0; j < n; j++)
+					dataGridViewW[i + 1, j ].Value = w1[k][i, j];
 		}
 	}
 }
