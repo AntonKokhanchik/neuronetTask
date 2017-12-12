@@ -13,27 +13,27 @@ namespace NeuronetProject
 	public partial class Form1 : Form
 	{
 		// Параметры задачи
-		private int n;				// количество нейронов
-		private double T;			// отрезок времени
-		private double B;			// ограничение на синаптические веса
-		private double M1;			// штрафные коэффициенты
+		private int n;              // количество нейронов
+		private double T;           // отрезок времени
+		private double B;           // ограничение на синаптические веса
+		private double M1;          // штрафные коэффициенты
 		private double M2;
-		private double[] a;			// начальные значени я характеристик нейронов
-		private double[] A;	
+		private double[] a;         // начальные значени я характеристик нейронов
+		private double[] A;
 		private double[] Y;
 
 		// параметры метода
-		private int q;				// мелкость разбиения и количество слоёв
+		private int q;              // мелкость разбиения и количество слоёв
 
-		private double epsilon;		// точность
+		private double epsilon;     // точность
 		private double alpha;        // шаг градиентного спуска
 		private double dt;           // отрезок разбиения
 		private double[/*номер слоя*/][/*номер нейрона*/] p;                        // Множители Лагранжа
 
-		private double[/*номер слоя*/][/*номер нейрона*/] x0;						// Характеристики нейрона на предыдущем шаге
-		private double[/*номер слоя*/][/*номер нейрона*/] x1;						// Характеристики нейрона на текущем шаге
-		private double[/*номер слоя*/][/*номер нейрона 1*/,/*номер нейрона 2*/] w0;	// синаптические веса нейрона на предыдущем шаге
-		private double[/*номер слоя*/][/*номер нейрона 1*/,/*номер нейрона 2*/] w1;	// синаптические веса нейрона на текущем шаге
+		private double[/*номер слоя*/][/*номер нейрона*/] x0;                       // Характеристики нейрона на предыдущем шаге
+		private double[/*номер слоя*/][/*номер нейрона*/] x1;                       // Характеристики нейрона на текущем шаге
+		private double[/*номер слоя*/][/*номер нейрона 1*/,/*номер нейрона 2*/] w0; // синаптические веса нейрона на предыдущем шаге
+		private double[/*номер слоя*/][/*номер нейрона 1*/,/*номер нейрона 2*/] w1; // синаптические веса нейрона на текущем шаге
 		private double I0;           // значение целевой функции на предыдущем шаге
 		private double I1;           // значение целевой функции на текущем шаге
 
@@ -42,24 +42,6 @@ namespace NeuronetProject
 		{
 			InitializeComponent();
 			InitializeParameters();
-		}
-
-		private void InitializeParameters()
-		{
-			dataGridViewParams.Rows.Add(1, 1, 5, 0.3);
-			dataGridViewParams.Rows.Add(2, 2, 6, 1.7);
-			dataGridViewParams.Rows.Add(3, 3, 7, 0.61);
-			dataGridViewParams.Rows.Add(4, 4, 8, 0.03);
-
-
-			fieldM1.Text = "10000";
-			fieldM2.Text = "10000";
-            fieldT.Text = "10";
-			fieldB.Text = "4,3";
-			fieldEpsilon.Text = "1E-6";
-			fieldAlpha.Text = "1E-6";
-			ParseParams();
-			InitArrays();
 		}
 
 		private void fieldN_ValueChanged(object sender, EventArgs e)
@@ -78,9 +60,14 @@ namespace NeuronetProject
 				dataGridViewParams.Rows.RemoveAt(n);
 		}
 
+		private void fieldQ_ValueChanged(object sender, EventArgs e)
+		{
+			fieldK.Maximum = q - 1;
+		}
+
 		private void buttonEnterTaskParams_Click(object sender, EventArgs e)
 		{
-			ParseParams();
+			ParseParameters();
 			CalculateX();
 			CalculateI();
 			x0 = x1;
@@ -92,22 +79,87 @@ namespace NeuronetProject
 			FillDataGridViewX();
 		}
 
-		private void FillDebug(double l)
+		private void buttonEnterTaskParams_MouseDown(object sender, MouseEventArgs e)
 		{
-			if(l==0)
-			{
-				textBoxStep.Clear();
-				textBoxI.Clear();
-				textBoxX.Clear();
-			}
-			textBoxStep.AppendText(l + "\n");
-			textBoxI.AppendText(I1 + "\n");
-			for (int i = 0; i < n; i++)
-				textBoxX.AppendText(x1[q][i]+"	");
-			textBoxX.AppendText("\n");
+			buttonEnterTaskParams.ForeColor = Color.Black;
 		}
 
-		private void ParseParams()
+		private void buttonShowW_Click(object sender, EventArgs e)
+		{
+			int k = Decimal.ToInt32(fieldK.Value);
+			while (dataGridViewW.Columns.Count < n + 1)
+				dataGridViewW.Columns.Add(dataGridViewW.Columns.Count.ToString(), dataGridViewW.Columns.Count.ToString());
+			while (dataGridViewW.Columns.Count > n + 1)
+				dataGridViewW.Columns.RemoveAt(n + 1);
+
+			while (dataGridViewW.Rows.Count < n)
+				dataGridViewW.Rows.Add((dataGridViewW.Rows.Count + 1).ToString());
+			while (dataGridViewW.Rows.Count > n)
+				dataGridViewW.Rows.RemoveAt(n);
+
+			for (int i = 0; i < n; i++)
+				for (int j = 0; j < n; j++)
+					dataGridViewW[i + 1, j].Value = w1[k][i, j];
+		}
+
+		private void buttonGraphX_Click(object sender, EventArgs e)
+		{
+			Graphics g = pictureBox2.CreateGraphics();
+			// задаём коэффициенты
+			double scalex = 700 / q;
+			double scaley = 175 / MaxX();
+			// задаём начало координат
+			g.TranslateTransform(3, 175);
+
+			// чертим оси
+			Pen pen = new Pen(Color.Gray, 2);
+			Point[] tmpoints = new Point[2];
+			tmpoints[0] = new Point(-3, 0);
+			tmpoints[1] = new Point(700, 0);
+			g.DrawLines(pen, tmpoints);
+			tmpoints[0] = new Point(0, 175);
+			tmpoints[1] = new Point(0, -175);
+			g.DrawLines(pen, tmpoints);
+
+			Random r = new Random();
+
+			// чертим графики
+			for (int i = 0; i < n; i++)
+			{
+				switch (i)
+				{
+					case 0: pen = new Pen(Color.Black, 2); break;
+					case 1: pen = new Pen(Color.Red, 2); break;
+					case 2: pen = new Pen(Color.Green, 2); break;
+					case 3: pen = new Pen(Color.Blue, 2); break;
+					default: pen = new Pen(Color.FromArgb(r.Next(255), r.Next(255), r.Next(255), r.Next(255)), 2); break;
+				}
+				PointF[] points = new PointF[q + 1];
+				for (int k = 0; k <= q; k++)
+					points[k] = new PointF(float.Parse((k * scalex).ToString()), float.Parse((-x1[k][i] * scaley).ToString()));
+				g.DrawLines(pen, points);
+			}
+		}
+
+		private void InitializeParameters()
+		{
+			dataGridViewParams.Rows.Add(1, 1, 5, 0.3);
+			dataGridViewParams.Rows.Add(2, 2, 6, 1.7);
+			dataGridViewParams.Rows.Add(3, 3, 7, 0.61);
+			dataGridViewParams.Rows.Add(4, 4, 8, 0.03);
+
+
+			fieldM1.Text = "10000";
+			fieldM2.Text = "10000";
+			fieldT.Text = "10";
+			fieldB.Text = "4,3";
+			fieldEpsilon.Text = "1E-6";
+			fieldAlpha.Text = "1E-6";
+			ParseParameters();
+			InitArrays();
+		}
+
+		private void ParseParameters()
 		{
 			n = Decimal.ToInt32(fieldN.Value);
 			q = Decimal.ToInt32(fieldQ.Value);
@@ -132,7 +184,7 @@ namespace NeuronetProject
 				MessageBox.Show("В поле M2 ошибка, вводите только числа");
 				return;
 			}
-			if(!double.TryParse(fieldEpsilon.Text, out epsilon))
+			if (!double.TryParse(fieldEpsilon.Text, out epsilon))
 			{
 				MessageBox.Show("В поле ɛ ошибка, вводите только числа");
 				return;
@@ -191,39 +243,43 @@ namespace NeuronetProject
 				p[k] = new double[n];
 		}
 
-		private void CalculateX()
+		private void FillDebug(double l)
 		{
-			for (int k = 0; k < q; k++)
-				for (int i = 0; i < n; i++)
-				{ 
-					double Swx = 0;
-					for (int j = 0; j < n; j++)
-						Swx += w1[k][i, j] * x1[k][j];
-
-					x1[k+1][i] = x1[k][i] + dt * (-Y[i] * x1[k][i] + Swx);
-				}
+			if (l == 0)
+			{
+				textBoxStep.Clear();
+				textBoxI.Clear();
+				textBoxX.Clear();
+			}
+			textBoxStep.AppendText(l + "\n");
+			textBoxI.AppendText(I1 + "\n");
+			for (int i = 0; i < n; i++)
+				textBoxX.AppendText(x1[q][i] + "	");
+			textBoxX.AppendText("\n");
 		}
 
-		private void CalculateI()
+		private void FillDataGridViewX()
 		{
-			double Sw = 0;
-			for (int k = 0; k < q; k++)
+			while (dataGridViewX.Columns.Count < n + 1)
+				dataGridViewX.Columns.Add("x" + (dataGridViewX.Columns.Count), "x" + (dataGridViewX.Columns.Count));
+			while (dataGridViewX.Columns.Count > n + 1)
+				dataGridViewX.Columns.RemoveAt(n + 1);
+
+			dataGridViewX.Rows.Clear();
+			for (int k = 0; k <= q; k++)
+			{
+				dataGridViewX.Rows.Add(k.ToString());
 				for (int i = 0; i < n; i++)
-					for (int j = 0; j < n; j++)
-						Sw += w1[k][i, j] * w1[k][i, j];
-
-			double Sx = 0;
-			for (int i = 0; i < n; i++)
-				Sx += (x1[q][i] - A[i]) * (x1[q][i] - A[i]);
-
-			I1 = M1 * dt * Sw + M2 * Sx;
+					dataGridViewX["x" + (i + 1), k].Value = x1[k][i];
+			}
+			fieldI.Text = I1.ToString();
 		}
 
 		private void RunOptimization()
 		{
-            CalculateP();
+			CalculateP();
 			double l = 1;
-            while (true)
+			while (true)
 			{
 				CalculateW();
 				CalculateX();
@@ -253,7 +309,7 @@ namespace NeuronetProject
 
 					FillDebug(l++);
 				}
-            }
+			}
 		}
 
 		private void CalculateP()
@@ -261,7 +317,7 @@ namespace NeuronetProject
 			for (int i = 0; i < n; i++)
 				p[q][i] = -2 * M2 * (x0[q][i] - A[i]);
 
-			for(int k=q-1; k>0; k--)
+			for (int k = q - 1; k > 0; k--)
 			{
 				for (int i = 0; i < n; i++)
 				{
@@ -288,97 +344,41 @@ namespace NeuronetProject
 					}
 		}
 
-		private void FillDataGridViewX()
+		private void CalculateX()
 		{
-			while (dataGridViewX.Columns.Count < n + 1)
-				dataGridViewX.Columns.Add("x" + (dataGridViewX.Columns.Count), "x" + (dataGridViewX.Columns.Count));
-			while (dataGridViewX.Columns.Count > n + 1)
-				dataGridViewX.Columns.RemoveAt(n + 1);
-
-			dataGridViewX.Rows.Clear();
-			for (int k = 0; k <= q; k++)
-			{
-				dataGridViewX.Rows.Add(k.ToString());
+			for (int k = 0; k < q; k++)
 				for (int i = 0; i < n; i++)
-					dataGridViewX["x" + (i + 1), k].Value = x1[k][i];
-			}
-            fieldI.Text = I1.ToString();
+				{
+					double Swx = 0;
+					for (int j = 0; j < n; j++)
+						Swx += w1[k][i, j] * x1[k][j];
+
+					x1[k + 1][i] = x1[k][i] + dt * (-Y[i] * x1[k][i] + Swx);
+				}
 		}
 
-		private void buttonGraphX_Click(object sender, EventArgs e)
+		private void CalculateI()
 		{
-			Graphics g = pictureBox2.CreateGraphics();
-			// задаём коэффициенты
-			double scalex = 700 / q;
-			double scaley = 175 / MaxX();
-			// задаём начало координат
-			g.TranslateTransform(3, 175);
+			double Sw = 0;
+			for (int k = 0; k < q; k++)
+				for (int i = 0; i < n; i++)
+					for (int j = 0; j < n; j++)
+						Sw += w1[k][i, j] * w1[k][i, j];
 
-			// чертим оси
-			Pen pen = new Pen(Color.Gray, 2);
-			Point[] tmpoints = new Point[2];
-			tmpoints[0] = new Point(-3, 0);
-			tmpoints[1] = new Point(700, 0);
-			g.DrawLines(pen, tmpoints);
-			tmpoints[0] = new Point(0, 175);
-			tmpoints[1] = new Point(0, -175);
-			g.DrawLines(pen, tmpoints);
+			double Sx = 0;
+			for (int i = 0; i < n; i++)
+				Sx += (x1[q][i] - A[i]) * (x1[q][i] - A[i]);
 
-			Random r = new Random();
-
-			// чертим графики
-			for (int i=0; i<n; i++)
-			{ 
-				switch (i)
-				{
-					case 0: pen = new Pen(Color.Black, 2); break;
-					case 1: pen = new Pen(Color.Red, 2); break;
-					case 2: pen = new Pen(Color.Green, 2); break;
-					case 3: pen = new Pen(Color.Blue, 2); break;
-					default: pen = new Pen(Color.FromArgb(r.Next(255), r.Next(255), r.Next(255), r.Next(255)), 2); break;
-				}
-				PointF[] points = new PointF[q+1];
-				for (int k = 0; k <= q; k++)
-					points[k] = new PointF(float.Parse((k * scalex).ToString()), float.Parse((-x1[k][i] * scaley).ToString()));
-				g.DrawLines(pen, points);
-			}
+			I1 = M1 * dt * Sw + M2 * Sx;
 		}
 
 		private double MaxX()
 		{
 			double max = x0[0].Max();
-			for (int k=1;k<q;k++)
+			for (int k = 1; k < q; k++)
 				if (max < x0[k].Max())
 					max = x0[k].Max();
 			return max;
-		}
-
-		private void buttonEnterTaskParams_MouseDown(object sender, MouseEventArgs e)
-		{
-			buttonEnterTaskParams.ForeColor = Color.Black;
-		}
-
-		private void fieldQ_ValueChanged(object sender, EventArgs e)
-		{
-			fieldK.Maximum = q - 1;
-		}
-
-		private void buttonShowW_Click(object sender, EventArgs e)
-		{
-			int k = Decimal.ToInt32(fieldK.Value);
-			while (dataGridViewW.Columns.Count < n + 1)
-				dataGridViewW.Columns.Add(dataGridViewW.Columns.Count.ToString(), dataGridViewW.Columns.Count.ToString());
-			while (dataGridViewW.Columns.Count > n + 1)
-				dataGridViewW.Columns.RemoveAt(n + 1);
-
-			while (dataGridViewW.Rows.Count < n)
-				dataGridViewW.Rows.Add((dataGridViewW.Rows.Count+1).ToString());
-			while (dataGridViewW.Rows.Count > n)
-				dataGridViewW.Rows.RemoveAt(n);
-
-			for (int i = 0; i < n; i++)
-				for (int j = 0; j < n; j++)
-					dataGridViewW[i + 1, j ].Value = w1[k][i, j];
 		}
 	}
 }

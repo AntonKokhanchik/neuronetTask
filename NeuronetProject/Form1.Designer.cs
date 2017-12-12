@@ -290,10 +290,10 @@
 			this.dataGridViewParams.AllowUserToAddRows = false;
 			this.dataGridViewParams.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridViewParams.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.i,
-            this.ai,
-            this.Aai,
-            this.Yi});
+			this.i,
+			this.ai,
+			this.Aai,
+			this.Yi});
 			this.dataGridViewParams.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.dataGridViewParams.Location = new System.Drawing.Point(0, 160);
 			this.dataGridViewParams.Name = "dataGridViewParams";
@@ -360,23 +360,23 @@
 			// 
 			this.fieldN.Location = new System.Drawing.Point(141, 28);
 			this.fieldN.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
+			1000,
+			0,
+			0,
+			0});
 			this.fieldN.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+			1,
+			0,
+			0,
+			0});
 			this.fieldN.Name = "fieldN";
 			this.fieldN.Size = new System.Drawing.Size(46, 20);
 			this.fieldN.TabIndex = 2;
 			this.fieldN.Value = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
+			4,
+			0,
+			0,
+			0});
 			this.fieldN.ValueChanged += new System.EventHandler(this.fieldN_ValueChanged);
 			// 
 			// label2
@@ -402,10 +402,10 @@
 			// 
 			this.fieldK.Location = new System.Drawing.Point(191, 134);
 			this.fieldK.Maximum = new decimal(new int[] {
-            199,
-            0,
-            0,
-            0});
+			199,
+			0,
+			0,
+			0});
 			this.fieldK.Name = "fieldK";
 			this.fieldK.Size = new System.Drawing.Size(70, 20);
 			this.fieldK.TabIndex = 16;
@@ -425,7 +425,7 @@
 			this.dataGridViewW.AllowUserToDeleteRows = false;
 			this.dataGridViewW.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridViewW.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ij});
+			this.ij});
 			this.dataGridViewW.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.dataGridViewW.Location = new System.Drawing.Point(0, 160);
 			this.dataGridViewW.Name = "dataGridViewW";
@@ -470,23 +470,23 @@
 			// 
 			this.fieldQ.Location = new System.Drawing.Point(191, 47);
 			this.fieldQ.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
+			100000,
+			0,
+			0,
+			0});
 			this.fieldQ.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
+			20,
+			0,
+			0,
+			0});
 			this.fieldQ.Name = "fieldQ";
 			this.fieldQ.Size = new System.Drawing.Size(70, 20);
 			this.fieldQ.TabIndex = 8;
 			this.fieldQ.Value = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
+			200,
+			0,
+			0,
+			0});
 			this.fieldQ.ValueChanged += new System.EventHandler(this.fieldQ_ValueChanged);
 			// 
 			// label8
@@ -550,7 +550,7 @@
 			this.dataGridViewX.AllowUserToDeleteRows = false;
 			this.dataGridViewX.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridViewX.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.k});
+			this.k});
 			this.dataGridViewX.Location = new System.Drawing.Point(8, 6);
 			this.dataGridViewX.Name = "dataGridViewX";
 			this.dataGridViewX.RowHeadersVisible = false;
@@ -766,12 +766,12 @@
 		private System.Windows.Forms.Label label10;
 		private System.Windows.Forms.Label label12;
 		private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox fieldI;
-        private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.Button buttonGraphX;
-        private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.TabPage tabPage5;
+		private System.Windows.Forms.Label label13;
+		private System.Windows.Forms.TextBox fieldI;
+		private System.Windows.Forms.TabPage tabPage4;
+		private System.Windows.Forms.Button buttonGraphX;
+		private System.Windows.Forms.PictureBox pictureBox2;
+		private System.Windows.Forms.TabPage tabPage5;
 		private System.Windows.Forms.DataGridView dataGridViewW;
 		private System.Windows.Forms.DataGridViewTextBoxColumn ij;
 		private System.Windows.Forms.TextBox textBoxX;
