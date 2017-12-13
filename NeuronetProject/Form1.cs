@@ -105,41 +105,16 @@ namespace NeuronetProject
 		private void buttonGraphX_Click(object sender, EventArgs e)
 		{
 			Graphics g = pictureBox2.CreateGraphics();
-			// задаём коэффициенты
-			double scalex = 700 / q;
-			double scaley = 175 / MaxX();
-			// задаём начало координат
-			g.TranslateTransform(3, 175);
-
-			// чертим оси
-			Pen pen = new Pen(Color.Gray, 2);
-			Point[] tmpoints = new Point[2];
-			tmpoints[0] = new Point(-3, 0);
-			tmpoints[1] = new Point(700, 0);
-			g.DrawLines(pen, tmpoints);
-			tmpoints[0] = new Point(0, 175);
-			tmpoints[1] = new Point(0, -175);
-			g.DrawLines(pen, tmpoints);
-
-			Random r = new Random();
-
-			// чертим графики
-			for (int i = 0; i < n; i++)
-			{
-				switch (i)
-				{
-					case 0: pen = new Pen(Color.Black, 2); break;
-					case 1: pen = new Pen(Color.Red, 2); break;
-					case 2: pen = new Pen(Color.Green, 2); break;
-					case 3: pen = new Pen(Color.Blue, 2); break;
-					default: pen = new Pen(Color.FromArgb(r.Next(255), r.Next(255), r.Next(255), r.Next(255)), 2); break;
-				}
-				PointF[] points = new PointF[q + 1];
-				for (int k = 0; k <= q; k++)
-					points[k] = new PointF(float.Parse((k * scalex).ToString()), float.Parse((-x1[k][i] * scaley).ToString()));
-				g.DrawLines(pen, points);
-			}
+            Plot(x1, g);
 		}
+
+        private void buttonGraphP_Click(object sender, EventArgs e)
+        {
+            Graphics g = pictureBox3.CreateGraphics();
+            Plot(p, g);
+        }
+
+
 
 		private void InitializeParameters()
 		{
@@ -239,9 +214,9 @@ namespace NeuronetProject
 			// p
 			p = new double[q + 1][];
 			p[q] = new double[n];
-			for (int k = q - 1; k > 0; k--)
+			for (int k = q - 1; k >= 0; k--)
 				p[k] = new double[n];
-		}
+        }
 
 		private void FillDebug(double l)
 		{
@@ -372,13 +347,51 @@ namespace NeuronetProject
 			I1 = M1 * dt * Sw + M2 * Sx;
 		}
 
-		private double MaxX()
+		private double Max(double[][] N)
 		{
-			double max = x0[0].Max();
+			double max = N[0].Max();
 			for (int k = 1; k < q; k++)
-				if (max < x0[k].Max())
-					max = x0[k].Max();
+				if (max < N[k].Max())
+					max = N[k].Max();
 			return max;
 		}
-	}
+
+        private void Plot(double[][] N, Graphics g)
+        {
+            // задаём коэффициенты
+            double scalex = 700 / q;
+            double scaley = 175 / Max(N);
+            // задаём начало координат
+            g.TranslateTransform(3, 175);
+
+            // чертим оси
+            Pen pen = new Pen(Color.Gray, 2);
+            Point[] tmpoints = new Point[2];
+            tmpoints[0] = new Point(-3, 0);
+            tmpoints[1] = new Point(700, 0);
+            g.DrawLines(pen, tmpoints);
+            tmpoints[0] = new Point(0, 175);
+            tmpoints[1] = new Point(0, -175);
+            g.DrawLines(pen, tmpoints);
+
+            Random r = new Random();
+
+            // чертим графики
+            for (int i = 0; i < n; i++)
+            {
+                switch (i)
+                {
+                    case 0: pen = new Pen(Color.Black, 2); break;
+                    case 1: pen = new Pen(Color.Red, 2); break;
+                    case 2: pen = new Pen(Color.Green, 2); break;
+                    case 3: pen = new Pen(Color.Blue, 2); break;
+                    default: pen = new Pen(Color.FromArgb(r.Next(255), r.Next(255), r.Next(255), r.Next(255)), 2); break;
+                }
+                PointF[] points = new PointF[q + 1];
+                for (int k = 0; k <= q; k++)
+                    points[k] = new PointF(float.Parse((k * scalex).ToString()), float.Parse((-N[k][i] * scaley).ToString()));
+                g.DrawLines(pen, points);
+            }
+        }
+    }
 }
